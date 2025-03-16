@@ -1,10 +1,9 @@
- <x-layout> 
-    <x-slot name="title">Jobs</x-slot>
-    <ul>
-        @foreach ($jobs as $job)
-            <li>
-                 {{ $job }} 
-            </li>
-        @endforeach
-    </ul>
+<x-layout>
+     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"> 
+        @forelse ($jobs as $job)
+           <x-job-card :job="$job" />
+        @empty
+            <p>No jobs found</p>
+        @endforelse
+     </div>
 </x-layout>

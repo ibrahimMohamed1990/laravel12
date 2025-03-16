@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Job;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
@@ -12,9 +14,9 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs=[
-            'job1','job2','job3'];
-        return view('jobs.index',compact('jobs'));
+        $jobs= Job::all();
+        return view('jobs.index')->with('jobs', $jobs);
+        //return view('jobs.index',compact('jobs'));
     }
 
     /**
@@ -30,31 +32,86 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+            //dd($request->file('company_logo'));
+            $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'salary' => 'required|integer',
+            'tags' => 'nullable|string',
+            'job_type' => 'required|string',
+            'remote' => 'required|boolean',
+            'requirements' => 'nullable|string',
+            'benefits' => 'nullable|string',
+            'address' => 'nullable|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'zipcode' => 'nullable|string',
+            'contact_email' => 'required|string',
+            'contact_phone' => 'nullable|string',
+            'company_name' => 'required|string',
+            'company_description' => 'nullable|string',
+            'company_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'company_website' => 'nullable|url'
+        ]);
+        $validatedData['user_id'] = 1;
+
+        if($request->hasFile('company_logo')) {
+            $file = $request->file('company_logo')->store('logos', 'public');
+            $validatedData['company_logo'] = $file;
+          
+        }
+         Job::create($validatedData); 
+        return redirect()->route('jobs.index')->with('success', 'Job listing created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        
+    public function show(Job $job)
+    { 
+        return view('jobs.show')->with('job', $job);    
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Job $job)
     {
-        //
+        return view('jobs.edit')->with('job', $job);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Job $job)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'salary' => 'required|integer',
+            'tags' => 'nullable|string',
+            'job_type' => 'required|string',
+            'remote' => 'required|boolean',
+            'requirements' => 'nullable|string',
+            'benefits' => 'nullable|string',
+            'address' => 'nullable|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'zipcode' => 'nullable|string',
+            'contact_email' => 'required|string',
+            'contact_phone' => 'nullable|string',
+            'company_name' => 'required|string',
+            'company_description' => 'nullable|string',
+            'company_website' => 'nullable|url'
+        ]);
+        if($request->hasFile('company_logo')) {
+            Storage::disk('public')->delete('logos/' . basename($job->company_logo));
+
+            $file = $request->file('company_logo')->store('logos', 'public');
+            $validatedData['company_logo'] = $file;
+        }
+        $job->update($validatedData);
+        return redirect()->route('jobs.index')->with('success', 'Job listing updated successfully!');
     }
 
     /**
@@ -62,6 +119,9 @@ class JobController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $job = Job::findOrFail($id);
+        Storage::disk('public')->delete('logos/' . basename($job->company_logo));
+        $job->delete();
+        return redirect()->route('jobs.index')->with('success', 'Job listing deleted successfully!');
     }
 }
