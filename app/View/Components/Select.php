@@ -3,8 +3,8 @@
 namespace App\View\Components;
 
 use Closure;
-use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
 
 class Select extends Component
 {
@@ -21,6 +21,6 @@ class Select extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.select');
+        return view('components.inputs.select');
     }
 }

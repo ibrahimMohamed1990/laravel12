@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Job;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class JobController extends Controller
 {
+
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -53,7 +56,7 @@ class JobController extends Controller
             'company_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
             'company_website' => 'nullable|url'
         ]);
-        $validatedData['user_id'] = 1;
+        $validatedData['user_id'] = auth()->user()->id;
 
         if($request->hasFile('company_logo')) {
             $file = $request->file('company_logo')->store('logos', 'public');
@@ -68,7 +71,7 @@ class JobController extends Controller
      * Display the specified resource.
      */
     public function show(Job $job)
-    { 
+    {  
         return view('jobs.show')->with('job', $job);    
     }
 
@@ -77,6 +80,7 @@ class JobController extends Controller
      */
     public function edit(Job $job)
     {
+        $this->authorize('update', $job);
         return view('jobs.edit')->with('job', $job);
     }
 
@@ -85,6 +89,9 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
+        //dd($request->file('company_logo'));
+        $this->authorize('update', $job);
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -120,6 +127,8 @@ class JobController extends Controller
     public function destroy(string $id)
     {
         $job = Job::findOrFail($id);
+        $this->authorize('delete',  $job);
+        
         Storage::disk('public')->delete('logos/' . basename($job->company_logo));
         $job->delete();
         return redirect()->route('jobs.index')->with('success', 'Job listing deleted successfully!');

@@ -7,7 +7,7 @@
             <i class="fa fa-arrow-alt-circle-left"></i>
             Back To Listings
           </a>
-          {{-- @can('update', $job) --}}
+           @can('update', $job) 
           <div class="flex space-x-3 ml-4">
             <a href="{{route('jobs.edit', $job->id)}}"
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</a>
@@ -18,11 +18,11 @@
               @method('DELETE')
               <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
                 Delete
-              </button>
+              </button> 
             </form>
             <!-- End Delete Form -->
           </div>
-          {{-- @endcan --}}
+            @endcan  
         </div>
         <div class="p-4">
           <h2 class="text-xl font-semibold">
@@ -89,7 +89,7 @@
               <h3 class="text-lg font-semibold mb-4">
                 Apply For {{$job->title}}
               </h3>
-              <form method="POST" action="{{route('applicant.store', $job->id)}}" enctype="multipart/form-data">
+              {{-- <form method="POST" action="{{route('applicant.store', $job->id)}}" enctype="multipart/form-data">
                 @csrf
                 <x-inputs.text id="full_name" name="full_name" label="Full Name" :required="true" />
                 <x-inputs.text id="contact_phone" name="contact_phone" label="Contact Phone" />
@@ -102,7 +102,7 @@
                   Application</button>
                 <button @click="open = false"
                   class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md">Cancel</button>
-              </form>
+              </form> --}}
             </div>
           </div>
         </div>
@@ -141,7 +141,7 @@
         <i class="fas fa-info-circle mr-3"></i> You must be logged in to bookmark a job
       </p>
       @else
-      <form method="POST"
+      {{-- <form method="POST"
         action="{{auth()->user()->bookmarkedJobs()->where('job_id', $job->id)->exists() ? route('bookmarks.destroy', $job->id) : route('bookmarks.store', $job->id)}}"
         class="mt-10">
         @csrf
@@ -157,7 +157,7 @@
           <i class="fas fa-bookmark mr-3"></i> Bookmark Listing
         </button>
         @endif
-      </form>
+      </form> --}}
       @endguest
     </aside>
   </div>
