@@ -13,8 +13,7 @@
       </div>
       @endif
 
-       <form method="POST" action="{{route('profile.update')}}" enctype="multipart/form-data"> 
-       
+      <form method="POST" action="{{route('profile.update')}}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -29,7 +28,7 @@
     </div>
 
     {{-- Job Listings --}}
-     <div class="bg-white p-8 rounded-lg shadow-md w-full">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full">
       <h3 class="text-3xl text-center font-bold mb-4">
         My Job Listings
       </h3>
@@ -52,17 +51,11 @@
           </form>
           <!-- End Delete Form -->
         </div>
-      </div> </div>
-      @empty
-      <p>No jobs found</p>
-      @endforelse
-{{--
-  
-       <div class="mt-4 bg-gray-100 p-2">
+      </div>
+
+      {{-- Applicants --}}
+      <div class="mt-4 bg-gray-100 p-2">
         <h4 class="text-lg font-semibold mb-2">Applicants</h4>
-        @if($job->applicants->isEmpty())
-        <p class="text-gray-800">No applicants yet</p>
-        @else
         @forelse($job->applicants as $applicant)
         <div class="py-2">
           <p class="text-gray-800">
@@ -83,25 +76,24 @@
               <i class="fas fa-download"></i> Download Resume
             </a>
           </p>
-           
-            <form method="POST" action="{{route('applicant.destroy', $applicant->id)}}"
+          {{-- Delete Applicant --}}
+          <form method="POST" action="{{route('applicant.destroy', $applicant->id)}}"
             onsubmit="return confirm('Are you sure you want to delete this applicant?')">
             @csrf
             @method('DELETE')
             <button type="submit" class="text-red-500 hover:text-red-700 text-sm">
               <i class="fas fa-trash"></i> Delete Applicant
             </button>
-          </form> 
+          </form>
         </div>
         @empty
         <p class="text-gray-700 mb-5">No applicants for this job</p>
         @endforelse
       </div>
       @empty
-      <p class="text-gray-700">You have not job listings</p> 
-      @endforelse @endif
-    </div>  --}}
-  
+      <p class="text-gray-700">You have not job listings</p>
+      @endforelse
+    </div>
   </section>
   <x-bottom-banner />
 </x-layout>

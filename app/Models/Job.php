@@ -42,5 +42,12 @@ class Job extends Model
         return $this->belongsTo(User::class);
     }
  
- 
+    public function bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'job_user_bookmarks')->withTimestamps();
+    }
+    public function applicants(): HasMany
+    {
+        return $this->hasMany(Applicant::class);
+    }
 }
