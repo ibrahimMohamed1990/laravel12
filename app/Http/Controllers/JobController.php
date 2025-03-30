@@ -30,6 +30,14 @@ class JobController extends Controller
         return view('jobs.create');
     }
 
+    public function search()
+    {
+        $keyword = request('keywords');
+        $location = request('location'); 
+        $jobs = Job::where('title', 'like', '%' . $keyword . '%')->where('address', 'like', '%' . $location . '%')->paginate(6);
+        return view('jobs.index')->with('jobs', $jobs);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

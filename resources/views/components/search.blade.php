@@ -7,3 +7,10 @@
         <i class="fa fa-search mr-1"></i> Search
     </button>
 </form>
+<style>
+    input[type="text"] {
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>    

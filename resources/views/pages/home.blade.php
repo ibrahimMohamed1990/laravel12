@@ -1,5 +1,16 @@
 <x-layout>
-  <h2 class="text-center text-3xl mb-4 font-bold border border-gray-300 p-3">Welcome To Workopia</h2>
+  <div class="bg-blue-900 h-24 px-4 mb-4 flex justify-center items-center rounded">
+    <x-search />
+  </div>
+
+  {{-- Back button --}}
+  @if(request()->has('keywords') || request()->has('location'))
+  <a href="{{route('jobs.index')}}"
+    class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded mb-4 inline-block">
+    <i class="fa fa-arrow-left mr-1"></i> Back
+  </a>
+  @endif
+
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
     @forelse($jobs as $job)
     <x-job-card :job="$job" />
@@ -7,9 +18,8 @@
     <p>No jobs available</p>
     @endforelse
   </div>
-  <a href="{{route('jobs.index')}}" class="block text-xl text-center">
-    <i class="fa fa-arrow-alt-circle-right"></i> Show All Jobs
-  </a>
-
-  {{-- <x-bottom-banner /> --}}
+ <div class="mm_pagination">
+      {{$jobs->links()}}
+ </div>
+  
 </x-layout>

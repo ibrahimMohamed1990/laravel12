@@ -11,10 +11,11 @@ use App\Http\Controllers\ApplicantController;
 
 
 Route::get('/', function () {
-    $jobs = \App\Models\Job::latest()->take(6)->get();
+    $jobs = \App\Models\Job::paginate(6);
     return view('pages.home')->with('jobs', $jobs);
 })->name('home');
 
+Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
 Route::resource('jobs', JobController::class)->middleware(['auth', 'verified'])->only(['create','edit', 'update', 'destroy']);
 Route::resource('jobs', JobController::class)->except(['create', 'edit', 'update', 'destroy']);
 
